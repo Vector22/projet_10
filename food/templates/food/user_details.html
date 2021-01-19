@@ -1,0 +1,48 @@
+{% extends 'food/index.html' %}
+{% load static %}
+
+{% block header %}
+<style type="text/css">
+	header {
+		background-color: rgba(36, 142, 184, 0.7);
+		text-align: center;
+		margin-top: 70px;
+		width: auto;
+		height: 300px;
+	}
+	h1 {
+		font-size: 120px;
+		color: rgba(225, 225, 225, 0.2);
+	}
+	h3 {
+		text-align: center;
+	}
+	.email {
+		background-color: #FFF;
+		color: rgba(36, 142, 184, 0.7);
+		border-radius: 5px/5px;
+		padding: 8px;
+	}
+</style>
+<header>
+		<div class="container">
+			<div class="row username">
+				<h1 class="col-lg-12 col-md-12">
+					{{ user.username }}
+				</h1>
+			</div>
+			
+		</div>
+</header>
+{% endblock %}
+
+{% block sections %}
+<section class="container">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12 jumbotron">
+			<h3><span class="email">{{ user.email }}</span></h3>
+		</div>
+	</div>
+	
+</section>
+{% endblock %}

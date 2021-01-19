@@ -1,0 +1,266 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <link rel="icon" href="{% static 'food/img/home_page/logo_pur_beurre.png' %}" />
+  <title>Pure Beurre</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'food/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="{% static 'food/vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+  <link
+    href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+    rel='stylesheet' type='text/css'>
+  <link
+    href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic'
+    rel='stylesheet' type='text/css'>
+
+  <!-- Plugin CSS -->
+  <link href="{% static 'food/vendor/magnific-popup/magnific-popup.css' %}" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'food/css/creative.css' %}" rel="stylesheet">
+
+  <!-- Font awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+    integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+
+  <!-- My own styles -->
+  <link href="{% static 'food/css/index.css' %}" rel="stylesheet" />
+
+  <!-- Google fonts api -->
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css?family=Merienda:400,700');
+    @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
+  </style>
+
+</head>
+
+{% block body %}
+
+<body id="page-top">
+
+  <!-- Navigation -->
+  {% block nav %}
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand js-scroll-trigger" href="{% url 'home' %}">Pure Beurre</a>
+      </div>
+
+      <form class="navbar-form navbar-rigth inline-form" method="post">
+        {% csrf_token %}
+        <div class="form-group" id="f-g">
+          <table>
+            <tr>
+              <th>{{ form.search }}</th>
+              <td>{{ form.button }}</td>
+            </tr>
+          </table>
+        </div>
+      </form>
+
+      <ul class="nav navbar-nav link">
+        <!-- Display this block only if we are on the home page -->
+        <div class="home-nav navbar-nav">
+          <li> <a href="/#histoire">Histoire</a> </li>
+          <li> <a href="/#contact">Contacts</a> </li>
+        </div>
+
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'user_detail' user.id %}" title="Mon compte"><span
+              class="fas fa-user-circle fa-3x"></span></a></li>
+        <li><a href="{% url 'myFoods' %}"><img src="{% static 'food/img/carrot.png' %}" title="Mes aliments"></a></li>
+        <li> <a href="{% url 'logout' %}" title="Déconnexion"><span class="fas fa-sign-out-alt fa-3x"></span></a></li>
+        {% else %}
+        <li class="home-nav"> <a href="{% url 'login' %}">Connexion</a> </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  {% endblock %}
+
+  {% block header %}
+  <header class="masthead text-center text-white d-flex">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <h1 class="text-uppercase">
+            <strong>Du gras, oui, mais de qualité ! </strong>
+          </h1>
+          <hr>
+        </div>
+        <div class="col-lg-8 mx-auto">
+          <p class="text-faded mb-5" style="font-size: 32px;">Trouver un produit de subtitution pour ceux que vous
+            consommez tous les jours.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-offset-4 col-lg-4 col-lg-offset-4 mx-auto">
+          <form class="form-inline" method="post">
+            {% csrf_token %}
+            <div class="input-group col-lg-12">
+              <table>
+                <tr>
+                  <th>{{ form.search }}</th>
+                  <td>
+                    {{ form.button }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </header>
+  {% endblock %}
+
+  {% block sections %}
+  <section id="histoire">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading">Colette et Remy</h2>
+          <hr class="my-4">
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+          <h2>Notre identité</h2>
+          <blockquote>
+            <h3>De la ratatouille aux croissants</h3>
+            Pur Beurre est l'initiative de deux amoureux de la gastronomie française, Colette Tatou et Rémy, que vous
+            avez déjà certainement rencontrés dans notre excellent restaurant Ratatouille.<br><br>
+
+            <strong>Colette Tatou </strong>: "Nous aimons tous manger, surtout en France ! Personnellement, une baguette
+            fraîche, du bon fromage de chèvre et un bon vin rouge me suffisent amplement. Comme tout le monde, je fais
+            mes courses au supermarché. Mais petit à petit je me suis rendue compte, surtout lorsque nous avons ouvert
+            le restaurant, que je pouvais remplacer les produits aseptisés que j'avais l'habitude d'acheter par de bons
+            produits du terroir Et souvent pour le même prix !"<br><br>
+
+
+            <strong>Remy </strong> : "Pour ma part je me rendais déjà dans bien des magasins car j'aime beaucoup me
+            balader, surtout dans les caves et les cuisines. Je connaissais par coeur le contenu des boutiques bio (dont
+            je raffole) ainsi que les ingrédients de tous les aliments vendus. Lorsque Colette m'a demandé si elle
+            pouvait remplacer son Nutella matinal par un aliment plus sain, je savais tout de suite où le trouver.
+            L'idée de Pur Beurre était née !"
+          </blockquote>
+        </div>
+      </div>
+      <div class="row">
+        <div class="container-fluid p-0">
+          <div class="row no-gutters popup-gallery" style="background-color: #FFF; border-radius: 20px/20px;">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="colette">
+              <a class="portfolio-box" href="#colette">
+                <img class="img-fluid persona" src="{% static 'food/img/home_page/colette-tatou.png' %}" alt="">
+                <div class="portfolio-box-caption">
+                  <div class="portfolio-box-caption-content">
+                    <div class="project-category text-faded">
+                      Colette
+                    </div>
+                    <div class="project-name">
+                      Moi c'est Colette
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="remy">
+              <a class="portfolio-box" href="#remy">
+                <img class="img-fluid persona" src="{% static 'food/img/home_page/ratatouille.jpg' %}" alt="">
+                <div class="portfolio-box-caption">
+                  <div class="portfolio-box-caption-content">
+                    <div class="project-category text-faded">
+                      Remy
+                    </div>
+                    <div class="project-name">
+                      Moi c'est Remy
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+          <h2 class="section-heading" style="color: yellow;">Entrons en contact!</h2>
+          <hr class="my-4">
+          <p class="mb-5 ct">Prêt à éssayer notre nouvelle fonctionnalité ? C'est génial! Appelez-nous ou envoyez-nous
+            un courriel et nous vous répondrons dans les plus brefs délais!</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 ml-auto text-center">
+          <i class="fas fa-phone fa-3x mb-3 sr-contact ct"></i>
+          <p class="ct">123-456-6789</p>
+        </div>
+        <div class="col-lg-4 mr-auto text-center">
+          <i class="fas fa-envelope fa-3x mb-3 sr-contact ct"></i>
+          <p>
+            <a href="mailto:your-email@your-domain.com" style="color: yellow;">feedback@purebeurre.com</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endblock %}
+
+  {% block footer %}
+  <footer class="container">
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-12 ml-auto text-center">
+        <p>
+          <a href="{% url 'legale_notice' %}" style="color: yellow;">Mentions légales</a>
+        </p>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 ml-auto text-center">
+        <p>
+          <a href="#" style="color: yellow;">Contacts</a>
+        </p>
+      </div>
+
+    </div>
+
+  </footer>
+  {% endblock %}
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'food/vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'food/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="{% static 'food/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+  <script src="{% static 'food/vendor/scrollreveal/scrollreveal.min.js' %}"></script>
+  <script src="{% static 'food/vendor/magnific-popup/jquery.magnific-popup.min.js' %}"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="{% static 'food/js/creative.min.js' %}"></script>
+
+  <!-- Personnal custom scripts -->
+  <script type="text/javascript">
+
+  </script>
+
+</body>
+{% endblock %}
+
+</html>

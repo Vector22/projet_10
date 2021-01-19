@@ -1,0 +1,159 @@
+{% extends 'food/index.html' %}
+{% load static %}
+
+{% block header %}
+<style type="text/css">
+	:root {
+		--color-white: #FFF;
+		--color-primary: rgba(255, 117, 26, 0.9);
+		--color-primary-light: rgba(255, 117, 26, 0.4);
+	}
+
+	.container {
+		background-color: var(--color-white);
+	}
+
+	#mainNav .navabar-brand {
+		color: var(--color-primary) !important;
+	}
+
+	.food-box__name {
+		font-size: 22px;
+		font-weight: 400;
+		text-transform: uppercase;
+		color: var(--color-white);
+		text-align: right;
+		position: absolute;
+		top: 180px;
+		right: 0px;
+
+		padding: 5px 8px;
+		background-color: var(--color-primary-light);
+
+		/* Trick to break the line in 3/4 lines */
+		width: 75%;
+		transition: all 1s ease;
+	}
+
+	.food-box__name:hover {
+		background-color: var(--color-primary);
+	}
+
+	.food-box__footer {
+		font-size: 18px;
+		font-weight: 300;
+		color: var(--color-white);
+		background-color: var(--color-primary-light);
+		border: 1px solid var(--color-white);
+		border-radius: 30%;
+		padding: 5px 3px;
+		text-align: center;
+		position: absolute;
+		top: 350px;
+		right: 70px;
+		transition: all 1s ease;
+		cursor: pointer;
+	}
+
+	.food-box__footer:hover {
+		background-color: var(--color-primary);
+		color: var(--color-white);
+	}
+
+	.save-food-btn {
+		border: none;
+		background-color: inherit;
+		color: inherit;
+		cursor: pointer;
+	}
+
+	.badge {
+		color: green;
+		background-color: var(--color-white);
+		border-radius: 50%;
+		font-size: 1.3em;
+	}
+
+	.score {
+		position: absolute;
+		right: 30px;
+		margin-bottom: 15px;
+		width: 80%;
+	}
+
+	.score:hover {
+		color: green;
+		background-color: var(--color-white);
+	}
+</style>
+
+<header style="background-color: navy;
+	margin-top: 70px;">
+	<div class="container">
+		<div class="row thumbnail ">
+			<div class="mx-auto">
+				<img src="{{ first_food.image_link }}" class="main-img">
+			</div>
+		</div>
+
+	</div>
+</header>
+
+{% endblock %}
+
+{% block sections %}
+<div class="container">
+	<div class="text-center row">
+		<div class="col-md-12 col-sm-12">
+			<h3 class="jumbotron">Vous pouvez remplacez cet aliment par...</h3>
+		</div>
+	</div>
+
+	<!-- Use image grid -->
+	<div class="row imgage-grid">
+		{% for food in foodSubtituts %}
+		{% with image_link=food.image_link %}
+		<div class="col-sm-6 col-md-3 food-box__item" style="background-image: url('{{ image_link }}');
+		background-size: cover;
+		height: 400px;
+		opacity: 0.8;">
+			<div class="panel panel-default">
+				<button type="button" class="btn btn-success score">Score nutritionnel:
+					<span class="badge">{{ food.nutritionGrade }}</span>
+				</button>
+				<div class="panel-body food-box__body">
+					<a href="{% url 'food_detail' food.id %}">
+						<h4 class="food-box__name">{{ food.name }}</h4>
+					</a>
+				</div>
+				{% if user.is_authenticated %}
+				<div class="panel-footer food-box__footer">
+					<form method="POST" action="{% url 'saveFood' %}">
+						{% csrf_token %}
+						<input type="hidden" name="foodId" id="foodId" value="{{ food.id }}">
+						<input type="hidden" name="userId" id="userId" value="{{ user.id }}">
+						<span class="input-group-btn">
+							<span class="fas fa-save" aria-hidden="true"></span>
+							<input type="submit" value="Sauvegarder" class="save-food-btn">
+						</span>
+					</form>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+		{% endwith %}
+		{% endfor %}
+	</div>
+</div>
+{% if messages %}
+<ul class="messages">
+	{% for message in messages %}
+	<li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+		{% endfor %}
+</ul>
+{% endif %}
+</div>
+</div>
+
+
+{% endblock %}

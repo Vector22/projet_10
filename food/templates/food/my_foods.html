@@ -1,0 +1,132 @@
+{% extends 'food/index.html' %}
+{% load static %}
+
+{% block header %}
+<style type="text/css">
+	:root {
+		--color-white: #FFF;
+		--color-primary: rgba(255, 117, 26, 0.9);
+	}
+
+	.container {
+		background-color: var(--color-white);
+	}
+
+	.food-box__item {
+		margin-bottom: 10px;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+	}
+
+	.food-box__name {
+		font-size: 22px;
+		font-weight: 400;
+		text-transform: uppercase;
+		color: var(--color-white);
+		text-align: right;
+		position: absolute;
+		top: 180px;
+		right: 0px;
+
+		padding: 5px 8px;
+		background-color: rgba(255, 117, 26, 0.4);
+
+		/* Trick to break the line in 3/4 lines */
+		width: 75%;
+		transition: all 1s ease;
+	}
+
+	.food-box__name:hover {
+		background-color: var(--color-primary);
+	}
+
+	.badge {
+		color: green;
+		background-color: #FFF;
+		border-radius: 10px/25px;
+		font-size: 1.3em;
+	}
+
+	.h3 {
+		margin-top: 100px;
+	}
+
+	.score {
+		position: absolute;
+		right: 30px;
+		margin-bottom: 15px;
+		width: 80%;
+	}
+
+	.score:hover {
+		color: green;
+		background-color: var(--color-white);
+	}
+</style>
+
+{% endblock %}
+
+{% block sections %}
+<!-- <div class="container">
+	<div class="text-center row">
+		<div class="col-md-12 col-sm-12 h3">
+			{% if favoritesFoods %}
+			<h3 class="jumbotron">Mes aliments favoris</h3>
+			{% else %}
+			<h4 class="jumbotron">Vous n'avez pas d'aliments favoris</h4>
+			{% endif %}
+		</div>
+	</div>
+	<div class="row">
+		{% for favorite in favoritesFoods %}
+		<div class="col-md-4 text-center is" style="border: 2px solid black;">
+			<h3>{{ favorite.food.name }}</h3>
+			<br>
+			<button type="button" class="btn btn-success score">Score nutritionnel:
+				<span class="badge">{{favorite.food.nutritionGrade }}</span>
+			</button>
+			<a href="{% url 'food_detail' favorite.food.id %}">
+				<img src="{{ favorite.food.image_link }}" class="img">
+			</a>
+		</div>
+		{% endfor %}
+	</div>
+</div> -->
+
+<!-- Use image grid -->
+<div class="container">
+	<div class="text-center row">
+		<div class="col-md-12 col-sm-12 h3">
+			{% if favoritesFoods %}
+			<h3 class="jumbotron">Mes aliments favoris</h3>
+			{% else %}
+			<h4 class="jumbotron">Vous n'avez pas d'aliments favoris</h4>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="row imgage-grid">
+		{% for favorite in favoritesFoods %}
+		{% with favorite.food as food %}
+		{% with image_link=food.image_link %}
+		<div class="col-sm-6 col-md-3 food-box__item" style="background-image: url('{{ image_link }}');
+		background-size: cover;
+		height: 400px;
+		opacity: 0.8;">
+			<div class="panel panel-default">
+				<button type="button" class="btn btn-success score">Score nutritionnel:
+					<span class="badge">{{ food.nutritionGrade }}</span>
+				</button>
+				<div class="panel-body food-box__body">
+					<a href="{% url 'food_detail' food.id %}">
+						<h4 class="food-box__name">{{ food.name }}</h4>
+					</a>
+				</div>
+			</div>
+		</div>
+		{% endwith %}
+		{% endwith %}
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

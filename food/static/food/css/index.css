@@ -1,0 +1,5 @@
+/* Links styles */
+
+li > a:hover {
+    color: rgb(207, 190, 188) !important;
+}

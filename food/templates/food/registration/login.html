@@ -1,0 +1,32 @@
+{% extends '../index.html' %}
+
+{% block header %}
+  <h1 class="jumbotron">Login</h1>
+{% endblock %}
+
+{% block sections %}
+  <div class="container">
+    <div class="row text-center mx-auto">
+      <form method="post" class="col-lg-12">
+        {% csrf_token %}
+        {% for field in form %}
+          <p>
+            {{ field.label_tag }}<br>
+            {{ field }}
+            
+            {% for error in field.errors %}
+              <p style="color: red">{{ error }}</p>
+            {% endfor %}
+          </p>
+        {% endfor %}
+        <button type="submit">Login</button>
+      </form>
+    </div>
+    <div class="row text-center mx-auto">
+      <div class="col-lg-12" style="margin-top: 20px;">
+        <small>Vous ne disposez pas de compte ? <a href="{% url 'signup' %}" style="color: blue;"> Créer un compte !</a> </small>
+      </div>
+      
+    </div>
+  </div>
+{% endblock %}

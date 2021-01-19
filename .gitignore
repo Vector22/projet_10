@@ -1,0 +1,9 @@
+pure_beurre/__pycache__/
+food/__pycache__/
+food/management/__pycache__/
+food/management/commands/__pycache__/
+food/migrations/__pycache__/
+pure_beurre/settings/__pycache__/
+.coverage
+*.sqlite3
+env/
