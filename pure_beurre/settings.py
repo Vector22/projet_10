@@ -13,7 +13,6 @@ import os
 
 import dj_database_url
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,7 +24,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #     'SECRET_KEY', 'q*4)i8c!o%-pzz-#yy2g#@hi@&txxxzhzn=p0@d$)cw%k8+h5q')
 SECRET_KEY = 'q*4)i8c!o%-pzz-#yy2g#@hi@&txxxzhzn=p0@d$)cw%k8+h5q'
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.environ.get('ENV') == 'PRODUCTION':
     DEBUG = False
@@ -33,7 +31,10 @@ else:
     DEBUG = True
 
 # ALLOWED_HOSTS = ['vector-pure-beurre.herokuapp.com', '127.0.0.1', '0.0.0.0']
-ALLOWED_HOSTS = ['ulrich-pure-beurre.herokuapp.com', '127.0.0.1', 'localhost', '0.0.0.0']
+ALLOWED_HOSTS = [
+    'ulrich-pure-beurre.herokuapp.com', '127.0.0.1', 'localhost', '0.0.0.0',
+    'ulrich-pure-beurre.com'
+]
 
 # Application definition
 
@@ -94,11 +95,11 @@ if os.environ.get('ENV') == 'PRODUCTION':
     }
 else:
     DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
