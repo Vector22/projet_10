@@ -33,7 +33,7 @@ else:
     DEBUG = True
 
 # ALLOWED_HOSTS = ['vector-pure-beurre.herokuapp.com', '127.0.0.1', '0.0.0.0']
-ALLOWED_HOSTS = ['ulrich-pure-beurre.herokuapp.com', '127.0.0.1', 'localhost', '0.0.0.0']
+ALLOWED_HOSTS = ['ulrich-pure-beurre.herokuapp.com', '127.0.0.1', 'localhost', '0.0.0.0', '185.224.139.154']
 
 # Application definition
 
@@ -171,7 +171,7 @@ if os.environ.get('ENV') == 'PRODUCTION':
 
     # Simplified static file serving.
     # https://warehouse.python.org/project/whitenoise/
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
     # dj-database-url configuration
     db_from_env = dj_database_url.config(conn_max_age=500)
