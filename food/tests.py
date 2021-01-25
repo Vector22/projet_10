@@ -1,7 +1,11 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
-from django.core.files import File
 from django.urls import reverse
+# For selenium
+from django.test import LiveServerTestCase
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from webdriver_manager.firefox import GeckoDriverManager
 
 from .models import Category, Food, MyFood
 from .forms import SignUpForm, ResearchForm
@@ -10,7 +14,6 @@ from .forms import SignUpForm, ResearchForm
 
 
 class CategoryTest(TestCase):
-
     def setUp(self):
         self.name = "Boissons"
         self.url = "https://www.off.com/category/boissons"
@@ -26,7 +29,6 @@ class CategoryTest(TestCase):
 
 
 class FoodTest(TestCase):
-
     def setUp(self):
         self.catName = "Boissons"
         self.catUrl = "https://www.off.com/category/boissons"
@@ -54,7 +56,6 @@ class FoodTest(TestCase):
 
 
 class MyFoodTest(TestCase):
-
     def setUp(self):
         self.catName = "Boissons"
         self.catUrl = "https://www.off.com/category/boissons"
@@ -74,19 +75,18 @@ class MyFoodTest(TestCase):
                                         category=self.foodCategory)
 
         self.userId = 1
-        self.MyFood = MyFood.objects.create(userId=self.userId,
-                                            food=self.food)
+        self.MyFood = MyFood.objects.create(userId=self.userId, food=self.food)
 
     def test_initialize_MyFood(self):
         self.assertEqual(self.MyFood.food.nutritionGrade, 'C')
         self.assertTrue('Eau' in self.MyFood.food.ingredientsText)
         self.assertEqual(str(self.MyFood), "Orangina")
 
+
 # Test the app's form
 
 
 class SignUpFormTest(TestCase):
-
     def setUp(self):
         self.username = "Stephane"
         self.password = "St3ph4n3"
@@ -96,28 +96,33 @@ class SignUpFormTest(TestCase):
         self.first_name = "Nedelec"
 
     def test_signupForm_valid(self):
-        form = SignUpForm(data={'username': self.username,
-                                'first_name': self.first_name,
-                                'email': self.email,
-                                'password1': self.password1,
-                                'password2': self.password2})
+        form = SignUpForm(
+            data={
+                'username': self.username,
+                'first_name': self.first_name,
+                'email': self.email,
+                'password1': self.password1,
+                'password2': self.password2
+            })
 
         self.assertTrue(form.is_valid())
 
     def test_signupForm_invalid(self):
         """ We invalidate the signUpForm by set the email
         field to blank """
-        form = SignUpForm(data={'username': self.username,
-                                'first_name': self.first_name,
-                                'email': "",
-                                'password1': self.password1,
-                                'password2': self.password2})
+        form = SignUpForm(
+            data={
+                'username': self.username,
+                'first_name': self.first_name,
+                'email': "",
+                'password1': self.password1,
+                'password2': self.password2
+            })
 
         self.assertFalse(form.is_valid())
 
 
 class ResearchFormTest(TestCase):
-
     def setUp(self):
         self.searchText = "Chocolat"
 
@@ -131,17 +136,16 @@ class ResearchFormTest(TestCase):
         form = ResearchForm(data={'search': ""})
         self.assertFalse(form.is_valid())
 
+
 # Test the app's views
 
 
 class ViewsTest(TestCase):
-
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create(username="Stephane",
                                         email="user@mp.com",
-                                        first_name="Stephane"
-                                        )
+                                        first_name="Stephane")
         self.user.set_password('St3ph4n3')
         self.user.save()
 
@@ -158,15 +162,13 @@ class ViewsTest(TestCase):
         self.nutritionGrade = 'C'
         self.countries = "France"
         self.ingredientsText = "Eau, sucre, orange naturel"
-        self.image = File(open('media/image/caro.jpg', 'rb'))
-        self.imageSmall = File(open('media/image/caro-sm.jpg', 'rb'))
+        # self.image = File(open('media/image/caro.jpg', 'rb'))
+        # self.imageSmall = File(open('media/image/caro-sm.jpg', 'rb'))
         self.food = Food.objects.create(nameFr=self.nameFr,
                                         url=self.url,
                                         nutritionGrade=self.nutritionGrade,
                                         countries=self.countries,
                                         ingredientsText=self.ingredientsText,
-                                        image=self.image,
-                                        imageSmall=self.imageSmall,
                                         category=self.foodCategory)
         self.food.save()
 
@@ -209,10 +211,10 @@ class ViewsTest(TestCase):
                                     data={'foodId': self.food.id,
                                           'userId': self.user.id, })
         self.assertEqual(response.status_code, 302)"""
+
     def test_searchFood_view(self):
-        response = self.client.post(reverse('result',
-                                            kwargs={'searchedFood':
-                                                    self.food.nameFr}))
+        response = self.client.post(
+            reverse('result', kwargs={'searchedFood': self.food.nameFr}))
         self.assertEqual(response.status_code, 302)
         self.assertTemplateNotUsed(response, 'food/result.html')
 
@@ -226,7 +228,7 @@ class ViewsTest(TestCase):
         self.assertTemplateUsed(response, 'food/food_not_found.html')
 
     def test_foodDetail_view(self):
-        foodDetailUrl = reverse('food_detail', args=(self.food.id,))
+        foodDetailUrl = reverse('food_detail', args=(self.food.id, ))
         response = self.client.get(foodDetailUrl)
         # Status http 200 ok
         self.assertEqual(response.status_code, 200)
@@ -235,7 +237,7 @@ class ViewsTest(TestCase):
 
     def test_userDetail_view(self):
         self.client.login(username="Stephane", password="St3ph4n3")
-        userDetailUrl = reverse('user_detail', args=(self.user.id,))
+        userDetailUrl = reverse('user_detail', args=(self.user.id, ))
         response = self.client.get(userDetailUrl)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'], self.user)
@@ -244,3 +246,67 @@ class ViewsTest(TestCase):
         response = self.client.get(reverse('legale_notice'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'food/mentions_legales.html')
+
+
+# Test with selenium
+class AccountTestCase(LiveServerTestCase):
+    def setUp(self):
+        self.selenium = webdriver.Firefox(
+            executable_path=GeckoDriverManager().install())
+        super(AccountTestCase, self).setUp()
+
+    def tearDown(self):
+        self.selenium.quit()
+        super(AccountTestCase, self).tearDown()
+
+    def test_register(self):
+        selenium = self.selenium
+        # Opening the link we want to test
+        selenium.get('http://127.0.0.1:8000/signup/')
+        # Find the form element
+        username = selenium.find_element_by_id('id_username')
+        first_name = selenium.find_element_by_id('id_first_name')
+        last_name = selenium.find_element_by_id('id_last_name')
+        email = selenium.find_element_by_id('id_email')
+        password1 = selenium.find_element_by_id('id_password1')
+        password2 = selenium.find_element_by_id('id_password2')
+
+        submit = selenium.find_element_by_name('submit')
+
+        print(submit)
+
+        # Fill the form with data
+        first_name.send_keys('ulrich')
+        last_name.send_keys('ulrich')
+        username.send_keys('vector22')
+        email.send_keys('ulrich@gmail.com')
+        password1.send_keys('R3k1nV3ct0r**')
+        password2.send_keys('R3k1nV3ct0r**')
+
+        # Submitting the form
+        submit.send_keys(Keys.RETURN)
+
+        # Check the returned result
+        textTab = [
+            'Nom d\'utilisateur', 'First name', 'Last name', 'Email',
+            'Mot de passe', 'Confirmation du mot de passe'
+        ]
+
+        # assert the presence of some wignets label
+        for text in textTab:
+            assert text in selenium.page_source
+
+    def test_result(self):
+        # <h4 class="food-box__name">Zero cookie chocolate brownie flavour</h4>
+        selenium = self.selenium
+        # Opening the link we want to test
+        selenium.get('http://127.0.0.1:8000/result/chocolat')
+
+        # Assert the presence of some chocolat in the food list displayed
+        foodName = [
+            'Krispees quinoa amaranth', 'NESQUIK Barres de Céréales',
+            'Zero cookie chocolate brownie flavour'
+        ]
+
+        for name in foodName:
+            assert name in selenium.page_source
