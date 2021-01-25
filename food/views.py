@@ -139,3 +139,8 @@ def log_out(request):
 
 def legaleNotice(request):
     return render(request, 'food/mentions_legales.html', locals())
+
+
+# Test centry integration
+def trigger_error(request):
+    division_by_zero = 1 / 0
