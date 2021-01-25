@@ -4,6 +4,7 @@ food/management/__pycache__/
 food/management/commands/__pycache__/
 food/migrations/__pycache__/
 pure_beurre/settings/__pycache__/
+pure_beurre/settings/prod.py
 .coverage
 *.sqlite3
 env/

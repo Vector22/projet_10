@@ -11,29 +11,11 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 import os
 
-import dj_database_url
-
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ.get(
-#     'SECRET_KEY', 'q*4)i8c!o%-pzz-#yy2g#@hi@&txxxzhzn=p0@d$)cw%k8+h5q')
-SECRET_KEY = 'q*4)i8c!o%-pzz-#yy2g#@hi@&txxxzhzn=p0@d$)cw%k8+h5q'
-
-
-# SECURITY WARNING: don't run with debug turned on in production!
-if os.environ.get('ENV') == 'PRODUCTION':
-    DEBUG = False
-else:
-    DEBUG = True
-
-# ALLOWED_HOSTS = ['vector-pure-beurre.herokuapp.com', '127.0.0.1', '0.0.0.0']
-ALLOWED_HOSTS = ['ulrich-pure-beurre.herokuapp.com', '127.0.0.1', 'localhost', '0.0.0.0']
 
 # Application definition
 
@@ -81,19 +63,7 @@ WSGI_APPLICATION = 'pure_beurre.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-if os.environ.get('ENV') == 'PRODUCTION':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'pure_beurre',
-            'USER': 'v3ct0r22',
-            'PASSWORD': 'V3ct0r22*',
-            'HOST': 'localhost',
-            'PORT': '',
-        }
-    }
-else:
-    DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
@@ -151,28 +121,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Media url
 
 MEDIA_URL = '/media/'
-
-# Production statics files
-if os.environ.get('ENV') == 'PRODUCTION':
-
-    # Static files settings
-    # PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-
-    # STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
-
-    # Extra places for collectstatic to find static files.
-    # STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, 'static'), )
-
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STATIC_URL = '/static/'
-
-    # Extra places for collectstatic to find static files.
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
-
-    # Simplified static file serving.
-    # https://warehouse.python.org/project/whitenoise/
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-    # dj-database-url configuration
-    db_from_env = dj_database_url.config(conn_max_age=500)
-    DATABASES['default'].update(db_from_env)
