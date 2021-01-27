@@ -7,4 +7,5 @@ pure_beurre/settings/__pycache__/
 pure_beurre/settings/prod.py
 .coverage
 *.sqlite3
+staticfiles/
 env/
